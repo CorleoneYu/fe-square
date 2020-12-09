@@ -7,19 +7,19 @@ export enum ColType {
 }
 
 export interface IColProps {
-  colId: string;
-  type: ColType;
+  type?: ColType;
   name?: string;
 }
 
+let colIdx = 1;
 class Col {
   public colId: string;
   public type: ColType;
   private name: string = '';
 
   public constructor(props: IColProps) {
-    const { colId, type, name = '' } = props;
-    this.colId = colId;
+    const { type = ColType.text, name = '' } = props;
+    this.colId = `c-${colIdx++}`;
     this.type = type;
     this.name = name;
   }

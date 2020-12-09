@@ -1,17 +1,17 @@
 export interface ITableProps {
   rowIds: string[];
   colIds: string[];
-  tableId: string;
 }
 
+let tableIdx = 1;
 class Table {
   public tableId: string;
   public rowIds: string[] = [];
   public colIds: string[] = [];
 
   public constructor(props: ITableProps) {
-    const { rowIds, colIds, tableId } = props;
-    this.tableId = tableId;
+    const { rowIds, colIds } = props;
+    this.tableId = `t-${tableIdx++}`;
     this.rowIds = rowIds;
     this.colIds = colIds;
   }

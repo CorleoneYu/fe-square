@@ -1,10 +1,13 @@
-import Table, { ITableProps } from './Table';
+import Table from './Table';
 
 class TableManager {
   public tableMap: Map<string, Table> = new Map();
 
-  public createTable(props: ITableProps) {
-    const table = new Table(props);
+  public createTable() {
+    const table = new Table({
+      rowIds: [],
+      colIds: [],
+    });
     this.tableMap.set(table.tableId, table);
     return table;
   }
