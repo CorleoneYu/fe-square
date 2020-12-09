@@ -1,9 +1,10 @@
 import React from 'react';
+import Router from './component/router';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">hello react</header>
+      <Router />
     </div>
   );
 }
