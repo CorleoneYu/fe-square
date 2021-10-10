@@ -1,6 +1,6 @@
-import { serviceIds, DI_DEPENDENCIES, DI_TARGET } from './utils';
-import ServiceCollection from '../serviceCollection';
-import { SyncDescriptor } from '../descriptors';
+import ServiceCollection from '@/lib/cool-di/instantiation/serviceCollection';
+import { DI_DEPENDENCIES, DI_TARGET, serviceIds } from '@/lib/cool-di/instantiation/instantiation/utils';
+import { SyncDescriptor } from '@/lib/cool-di/instantiation';
 
 // 服务标识, 有两个作用
 // 1. 服务的 id

@@ -1,7 +1,8 @@
-import { createDecorator } from '../../instantiation';
-import { IBServiceDecorator } from '../b';
-import { IBService } from '../b/b.interface';
-import { IAService } from './a.interface';
+
+import { IAService } from '@/di/demo/a/a.interface';
+import { IBServiceDecorator } from '@/di/demo/b';
+import { IBService } from '@/di/demo/b/b.interface';
+import { createDecorator } from '@/lib/cool-di/instantiation';
 
 export const IAServiceDecorator = createDecorator<IAService>('AService');
 

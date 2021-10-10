@@ -9,7 +9,7 @@ const Column = () => {
         <>
             <Title />
             {cards.map((card, index) => (
-                <Group y={30 + index * 150}>
+                <Group y={30 + index * 150} key={index}>
                     <Card />
                 </Group>
             ))}

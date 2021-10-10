@@ -1,4 +1,4 @@
-import { createDecorator } from '../instantiation';
+import { createDecorator } from '@/lib/cool-di/instantiation';
 import { IAServiceDecorator } from './a';
 import { IAService } from './a/a.interface';
 import { IBServiceDecorator } from './b';

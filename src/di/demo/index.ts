@@ -1,7 +1,7 @@
 
 import 'reflect-metadata';
 
-import instantiationService, { services, SyncDescriptor, printServiceDependencies} from '../instantiation';
+import instantiationService, { services, SyncDescriptor, printServiceDependencies} from '@/lib/cool-di/instantiation';
 import{ AServiceImpl, IAServiceDecorator } from './a';
 import { IAService } from './a/a.interface'
 import { BServiceImpl, IBServiceDecorator } from './b';

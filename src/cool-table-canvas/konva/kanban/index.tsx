@@ -14,7 +14,7 @@ const Container = () => {
             <Stage width={kanbanWidth} height={kanbanHeight}>
                 <Layer>
                     {columns.map((column, index) => (
-                        <Group x={20 + index * 220}>
+                        <Group x={20 + index * 220} key={index}>
                             <Column />
                         </Group>
                     ))}
