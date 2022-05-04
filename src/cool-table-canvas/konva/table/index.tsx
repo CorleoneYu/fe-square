@@ -12,7 +12,7 @@ const { tableHeight, tableWidth, header } = tableConfig.style;
 const { colHeaderHeight, rowHeaderWidth } = header;
 
 const Container = () => {
-    const [table, setTable] = useState<ITable>(defaultTable);
+    const [table] = useState<ITable>(defaultTable);
     const [offset, setOffset] = useState<IOffset>({ x: 0, y: 0 });
     const { header, rows } = table;
 

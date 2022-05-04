@@ -1,4 +1,3 @@
-
 import { IBService } from '@/di/demo/b/b.interface';
 import { createDecorator } from '@/lib/cool-di/instantiation';
 

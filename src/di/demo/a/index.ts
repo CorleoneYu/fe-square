@@ -1,4 +1,3 @@
-
 import { IAService } from '@/di/demo/a/a.interface';
 import { IBServiceDecorator } from '@/di/demo/b';
 import { IBService } from '@/di/demo/b/b.interface';

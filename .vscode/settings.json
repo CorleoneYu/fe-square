@@ -1,6 +1,6 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "editor.tabSize": 4,
+    "editor.tabSize": 2,
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -8,5 +8,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/node_modules": false
-    }
+    },
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "editor.formatOnSave": true
 }

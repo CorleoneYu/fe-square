@@ -1,5 +1,5 @@
 import React from 'react';
-import './demo';
+// import './demo';
 
 const DiDemo: React.FC = () => {
    return <div className="di-demo">Di</div>
