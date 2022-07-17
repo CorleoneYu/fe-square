@@ -4,10 +4,11 @@ fe-square（前端广场）：用来练手的项目集合。
 
 ## cool-table
 
-一开始建库的时候想着：要不我用新的方式，依然使用 canvas 来写出 air-table 吧！  
+dom 实现：主要使用 react hooks，状态管理使用 hox。
 
-1. dom 实现：主要使用 react hooks，状态管理使用 hox;
-2. canvas 实现;
+## cool-table-canvas
+
+canvas 实现：主要使用 konva。
 
 ## editor
 
@@ -16,3 +17,10 @@ fe-square（前端广场）：用来练手的项目集合。
 ## di
 
 最近在看 依赖注入(di) 相关的内容，准备参考 vscode 实现一套（带上依赖可视化图）。
+
+- [x] 实现 di 框架，可简单进行依赖注入
+- [ ] 多层级 di
+
+## mini-react
+
+https://pomb.us/build-your-own-react/
