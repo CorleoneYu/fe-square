@@ -17,7 +17,6 @@ const Router = () => {
         <Route path="/editor" component={Editor} />
         <Route path="/di" component={Di} />
         <Route path="/use-interval-demo" component={Counter} />
-        <Redirect to="/use-interval-demo" />
       </Switch>
     </BrowserRouter>
   );

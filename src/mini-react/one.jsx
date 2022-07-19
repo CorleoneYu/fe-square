@@ -1,7 +1,5 @@
 /** @jsxRuntime classic */
 
-import ReactDOM from 'react-dom';
-
 /**
  * step 1: createElement Function
  */
@@ -33,4 +31,4 @@ const MiniReact = {
 
 /** @jsx MiniReact.createElement */
 export const element = <div id="mini-react">123</div>;
-console.log('element: ', element);
+console.log('[build-my-reaact]step1: element: ', element);

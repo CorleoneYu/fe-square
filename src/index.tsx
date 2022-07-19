@@ -1,5 +1,5 @@
 import React from 'react';
-import '@/mini-react/one';
+import '@/mini-react/two';
 import ReactDOM from 'react-dom';
 import App from './App';
 
