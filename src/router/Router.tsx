@@ -6,6 +6,7 @@ import KanBanCanvas from '@/cool-table-canvas/konva/kanban';
 import Editor from '@/editor';
 import Di from '@/di';
 import { Counter } from '@/use-interval-demo';
+import { IdleSchedulerDemo } from '@/idle-scheduler/demo';
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/editor" component={Editor} />
         <Route path="/di" component={Di} />
         <Route path="/use-interval-demo" component={Counter} />
+        <Route path="/idle-sheduler" component={IdleSchedulerDemo} />
       </Switch>
     </BrowserRouter>
   );
