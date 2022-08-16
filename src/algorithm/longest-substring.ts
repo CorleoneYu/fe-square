@@ -1,3 +1,6 @@
+/**
+ * link https://leetcode.com/problems/longest-substring-without-repeating-characters/
+ */
 export function lengthOfLongestSubstring(text: string): number {
   if (text.length === 0) {
     return 0;
