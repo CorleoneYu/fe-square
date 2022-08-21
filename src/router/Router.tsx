@@ -7,6 +7,7 @@ import Editor from '@/editor';
 import Di from '@/di';
 import { Counter } from '@/use-interval-demo';
 import { IdleSchedulerDemo } from '@/idle-scheduler/demo';
+import { RichTextEditor } from '@/delta-based-editor/demo';
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/di" component={Di} />
         <Route path="/use-interval-demo" component={Counter} />
         <Route path="/idle-sheduler" component={IdleSchedulerDemo} />
+        <Route path="/rich-text-editor" component={RichTextEditor} />
       </Switch>
     </BrowserRouter>
   );
