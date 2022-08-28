@@ -9,6 +9,7 @@
  * 2. 左边比 2 小的数：1
  * 5. 左边比 5 小的数：1, 3, 4, 2 = 10
  * 所以小和 = 1 + 4 + 1 + 10 = 16
+ * link p4 https://www.bilibili.com/video/BV13g41157hK?p=4&vd_source=7e817e5170ca4a2b16683f214bdf65c5
  */
 export function sumOfSmall(arr: number[]): number {
   if (arr.length < 2) {
