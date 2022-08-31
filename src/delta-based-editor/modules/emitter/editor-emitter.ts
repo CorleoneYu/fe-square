@@ -1,12 +1,19 @@
+import Delta from '@/delta-based-editor/data/delta';
 import { EventEmitter } from 'eventemitter3';
 
-enum EditorInnerEvent {
+export enum EditorInnerEvent {
   viewChange = 'viewChange',
+  textChange = 'textChange',
 }
 
 export interface IViewChangeEventProps {
   mutations: MutationRecord[];
   context: Record<string, any>;
+}
+
+export interface ITextChangeEventProps {
+  diffDelta: Delta;
+  delta: Delta;
 }
 
 /**
@@ -22,6 +29,14 @@ export class EditorInnerEmitter {
 
   public onViewChange(fn: (props: IViewChangeEventProps) => void) {
     this.eventEmitter.addListener(EditorInnerEvent.viewChange, fn);
+  }
+
+  public emitTextChange(props: ITextChangeEventProps) {
+    this.eventEmitter.emit(EditorInnerEvent.textChange, props);
+  }
+
+  public onTextChange(fn: (props: ITextChangeEventProps) => void) {
+    this.eventEmitter.addListener(EditorInnerEvent.textChange, fn);
   }
 
   public removeListener(event: EditorInnerEvent, fn: (...args: any) => void) {

@@ -5,15 +5,20 @@ import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-
 import { VRoot } from '@/delta-based-editor/view/vroot';
 
 export class DeltaBasedEditor implements IDeltaBasedEditor {
+  public innerEmitter = new EditorInnerEmitter();
+
   private input: HTMLDivElement = document.createElement('div');
   private vRoot!: VRoot;
-  private innerEmitter = new EditorInnerEmitter();
   private deltaManager!: DeltaManager;
 
   public constructor(props: IDeltaBasedEditorProps) {
     this.initInputDom(props.inputContainer, props.id);
     this.initModules();
     this.initEvents();
+  }
+
+  public getDelta(): Delta {
+    return this.deltaManager.getDelta();
   }
 
   // contenteditable
@@ -61,6 +66,11 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
     if (change.ops.length === 0) {
       return new Delta();
     }
+
+    this.innerEmitter.emitTextChange({
+      diffDelta: change,
+      delta: this.getDelta(),
+    });
 
     return change;
   }

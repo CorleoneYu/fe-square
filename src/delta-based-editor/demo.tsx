@@ -1,8 +1,14 @@
 import { DeltaBasedEditor } from '@/delta-based-editor';
-import React, { useEffect, useMemo, useRef } from 'react';
+import { EditorInnerEmitter, EditorInnerEvent, ITextChangeEventProps } from '@/delta-based-editor/modules/emitter/editor-emitter';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const StyledEditorDemo = styled.div`
+  p {
+      margin: 0;
+      padding: 0;
+  }
+
   .button-group {
     display: flex;
     font-size: 12px;
@@ -20,11 +26,11 @@ const StyledEditorDemo = styled.div`
   .editor {
     height: 200px;
     border: 1px solid black;
+  }
 
-    p {
-      margin: 0;
-      padding: 0;
-    }
+  .delta {
+    margin-top: 20px;
+    border: 1px solid black;
   }
 `;
 
@@ -42,6 +48,14 @@ const buttons = [
 export const RichTextEditor: React.FC = () => {
   const editorDomRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<DeltaBasedEditor | null>(null);
+  const [content, setContent] = useState('');
+  const [diff, setDiff] = useState('');
+
+  const handleTextChange = useCallback((props: ITextChangeEventProps) => {
+    const { delta, diffDelta } = props;
+    setContent(JSON.stringify(delta, null, 2));
+    setDiff(JSON.stringify(diffDelta, null, 2));
+  }, []);
 
   useEffect(() => {
     if (!editorDomRef.current) {
@@ -54,7 +68,15 @@ export const RichTextEditor: React.FC = () => {
     });
     (window as any).editor = editor
     editorRef.current = editor;
-  }, []);
+
+    // 注册事件
+    editor.innerEmitter.onTextChange(handleTextChange);
+
+    return () => {
+      editorRef.current = null;
+      editor.innerEmitter.removeListener(EditorInnerEvent.textChange, handleTextChange);
+    }
+  }, [handleTextChange]);
 
   const renderButtons = useMemo(() => <div className='button-group'>
     {buttons.map(button => <div key={button.id} className='button' id={button.id}>{button.id}</div>)}
@@ -65,8 +87,16 @@ export const RichTextEditor: React.FC = () => {
     <div className='editor' ref={editorDomRef} />
   </div>, []);
 
+  const renderDelta = useMemo(() => <div className='delta'>
+    <div>content: </div>
+    <div>{content}</div>
+    <div>diff: </div>
+    <div>{diff}</div>
+  </div>, [content, diff])
+
   return <StyledEditorDemo>
     {renderButtons}
     {renderEditor}
+    {renderDelta}
   </StyledEditorDemo>
 }

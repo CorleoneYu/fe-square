@@ -1,9 +1,11 @@
 import Delta from '@/delta-based-editor/data/delta';
-import { NEW_LINE_CHAR, vBlockToDelta, vRootToLines } from '@/delta-based-editor/utils/view';
+import { NEW_LINE_CHAR, NEW_LINE_CHAR_LENGTH, vBlockToDelta, vRootToLines } from '@/delta-based-editor/utils/view';
 import { VRoot } from '@/delta-based-editor/view/vroot';
 import isEqual from 'lodash/isEqual';
 
 interface IDeltaManager {
+  getLength(): number;
+  getDelta(): Delta;
   update(change?: Delta): Delta;
   getDeltaFromView(): Delta;
 }
@@ -19,6 +21,17 @@ export class DeltaManager implements IDeltaManager {
   public constructor(vRoot: VRoot) {
     this.delta = new Delta().insert(NEW_LINE_CHAR);
     this.vRoot = vRoot;
+  }
+
+  /**
+   * 获取文本长度。需要去除最后的 \n
+   */
+  public getLength(): number {
+    return this.delta.length() - NEW_LINE_CHAR_LENGTH;
+  }
+
+  public getDelta(): Delta {
+    return this.delta.slice(0, this.getLength());
   }
 
   public getDeltaFromView(): Delta {
