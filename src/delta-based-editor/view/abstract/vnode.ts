@@ -42,7 +42,17 @@ export default abstract class VNode extends LinkedNode<VNode> {
   }
 
   /**
+   * vNode 的长度
+   */
+  public abstract length(): number;
+
+  /**
    * 当 dom 更新时，需要更新响应的 VNode
    */
   public abstract update(context: Record<string, any>): void;
+
+  /**
+   * 插入一个子节点到给点节点之前。
+   */
+  public abstract insertBefore(childNode: VNode, refChild?: VNode | null): void;
 }

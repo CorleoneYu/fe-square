@@ -133,6 +133,36 @@ export class LinkedList<T extends LinkedNode<T>> implements Iterable<T> {
     return value;
   }
 
+  /**
+   * 遍历？
+   * @param index 
+   * @param length 
+   * @param callback 
+   * @returns 
+   */
+  public forEachAt(index: number, length: number, callback: (child: T, offset: number, length: number) => void) {
+    if (length <= 0) {
+      return;
+    }
+
+    let cur = 0;
+    let node;
+    for (node of this) {
+      const nodeLength = node.length();
+      if (cur >= index + length) {
+        break;
+      }
+
+      if (cur > index) {
+        callback(node, 0, Math.min(index + length - cur, nodeLength));
+      } else if (cur + nodeLength > index) {
+        callback(node, index - cur, Math.min(length, cur + nodeLength - index));
+      }
+
+      cur += nodeLength;
+    }
+  }
+
   public *[Symbol.iterator](): Iterator<T> {
     let node = this.head;
     let next: T | null;

@@ -1,7 +1,8 @@
+import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-emitter';
 import { getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
 import { VBlock } from '@/delta-based-editor/view/vblock';
-import { VContainer } from '@/delta-based-editor/view/vcontainer';
-import VNode from '@/delta-based-editor/view/vnode';
+import { VContainer } from '@/delta-based-editor/view/abstract/vcontainer';
+import VNode from '@/delta-based-editor/view/abstract/vnode';
 
 /**
  * view 层的根节点
@@ -12,14 +13,17 @@ export class VRoot extends VContainer {
   public static tagName = 'DIV';
 
   private mutationObserver!: MutationObserver;
+  private innerEmitter: EditorInnerEmitter;
 
   public static createDomNode() {
     return document.createElement(VRoot.tagName);
   }
 
-  public constructor(domNode: Node) {
+  public constructor(domNode: Node, innerEmitter: EditorInnerEmitter) {
     super(domNode);
     this.root = this;
+    this.innerEmitter = innerEmitter;
+
     this.startMutationObserver();
 
     this.clean();
@@ -84,6 +88,11 @@ export class VRoot extends VContainer {
     }
 
     this.optimize(context);
+
+    this.innerEmitter.emitViewChange({
+      mutations,
+      context,
+    });
   }
 
   public optimize(context: Record<string, any> = {}) {
@@ -99,7 +108,7 @@ export class VRoot extends VContainer {
   private startMutationObserver() {
     this.mutationObserver = new MutationObserver((mutationList) => {
       console.log('mutation', mutationList);
-      // this.sync(mutationList);
+      this.sync(mutationList);
     });
 
     this.mutationObserver.observe(this.domNode, {

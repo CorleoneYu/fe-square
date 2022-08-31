@@ -2,7 +2,7 @@ import React from 'react';
 // import '@/mini-react/eight';
 import ReactDOM from 'react-dom';
 import App from './App';
-// import '@/algorithm/sorts/merge-sort';
+// import '@/algorithm/sorts/quick-sort';
 
 const root = document.getElementById('root');
 

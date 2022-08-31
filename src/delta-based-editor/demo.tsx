@@ -20,6 +20,11 @@ const StyledEditorDemo = styled.div`
   .editor {
     height: 200px;
     border: 1px solid black;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
   }
 `;
 

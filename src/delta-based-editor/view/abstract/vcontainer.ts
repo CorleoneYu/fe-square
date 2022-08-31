@@ -1,5 +1,6 @@
-import { getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
-import VNode from '@/delta-based-editor/view/vnode';
+import { createVNodeFromDomNode, getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
+import { VLeaf } from '@/delta-based-editor/view/abstract/vleaf';
+import VNode from '@/delta-based-editor/view/abstract/vnode';
 
 const PROCESSING_ADDED_NODES_ERROR = 'Error processing addedNodes';
 
@@ -30,6 +31,25 @@ export class VContainer extends VNode {
    */
   public length() {
     return this.children.reduce((total, child) => total + child.length(), 0);
+  }
+
+
+  /**
+   * 递归获取全部叶子节点
+   * @param index 
+   * @param length 
+   * @returns 
+   */
+  public getLeaves(index = 0, length = Number.MAX_VALUE): VLeaf[] {
+    let leaves: VLeaf[] = [];
+    this.children.forEachAt(index, length, (child: VNode, index: number, length: number) => {
+      if (child instanceof VLeaf) {
+        leaves.push(child);
+      } else if (child instanceof VContainer) {
+        leaves = leaves.concat(child.getLeaves(index, length));
+      }
+    })
+    return leaves;
   }
 
   public update(_context: Record<string, any>): void {
@@ -94,13 +114,29 @@ export class VContainer extends VNode {
           throw new Error(PROCESSING_ADDED_NODES_ERROR);
         }
 
-        // TODO: 完善流程
-        // let refVNode: VNode | null = null;
-        // if (node.nextSibling) {
-        //   refVNode = getVNodeFromDomNode(node.nextSibling);
-        // }
+        // 先找到索引节点，即是否有已存在的兄弟 vNode
+        let refVNode: VNode | null = null;
+        if (node.nextSibling) {
+          refVNode = getVNodeFromDomNode(node.nextSibling);
+        }
+
+        // 是否有已存在的对应 vNode
+        let vNode = getVNodeFromDomNode(node);
+        if (!vNode) {
+          // 不存在的话，则创建新 vNode
+          vNode = createVNodeFromDomNode(node);
+        }
+
+        if (!VNode) {
+          throw new Error(PROCESSING_ADDED_NODES_ERROR);
+        }
+
+        if (vNode.next !== refVNode || vNode.parent !== parentVNode) {
+          parentVNode.insertBefore(vNode, refVNode);
+        }
+
       } catch (e: any) {
-        console.log('e', e);
+        console.log('[vContainer|update]Error', e);
         if (e.message === PROCESSING_ADDED_NODES_ERROR) {
           node.parentNode?.removeChild(node);
           return;

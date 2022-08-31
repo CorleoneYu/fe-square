@@ -1,15 +1,19 @@
 import { DeltaManager } from '@/delta-based-editor/core/delta-manager';
+import Delta from '@/delta-based-editor/data/delta';
 import { IDeltaBasedEditor, IDeltaBasedEditorProps } from '@/delta-based-editor/interface';
+import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-emitter';
 import { VRoot } from '@/delta-based-editor/view/vroot';
 
 export class DeltaBasedEditor implements IDeltaBasedEditor {
   private input: HTMLDivElement = document.createElement('div');
   private vRoot!: VRoot;
+  private innerEmitter = new EditorInnerEmitter();
   private deltaManager!: DeltaManager;
 
   public constructor(props: IDeltaBasedEditorProps) {
     this.initInputDom(props.inputContainer, props.id);
     this.initModules();
+    this.initEvents();
   }
 
   // contenteditable
@@ -39,7 +43,25 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
   }
 
   private initModules() {
-    this.vRoot = new VRoot(this.input);
+    this.vRoot = new VRoot(this.input, this.innerEmitter);
     this.deltaManager = new DeltaManager(this.vRoot);
+  }
+
+  private initEvents() {
+    this.innerEmitter.onViewChange(() => {
+      this.modify(() => this.deltaManager.update());
+    })
+  }
+
+  // 处理 Delta 改变的 API
+  private modify(
+    modifier: () => Delta,
+  ): Delta {
+    const change = modifier();
+    if (change.ops.length === 0) {
+      return new Delta();
+    }
+
+    return change;
   }
 }

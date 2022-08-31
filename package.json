@@ -14,6 +14,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.4",
     "easycanvas": "^0.8.5",
+    "eventemitter3": "^4.0.7",
     "fast-diff": "^1.2.0",
     "hox": "^1.1.2",
     "konva": "^7.2.5",
