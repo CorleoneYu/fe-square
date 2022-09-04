@@ -1,9 +1,12 @@
-import { VBlock } from '@/delta-based-editor/view/vblock';
-import VNode from '@/delta-based-editor/view/abstract/vnode';
-import { VRoot } from '@/delta-based-editor/view/vroot';
+import { VBlock } from '@/delta-based-editor/view/vnodes/vblock';
+import VNode from '@/delta-based-editor/view/vnodes/abstract/vnode';
+import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 import Delta from '@/delta-based-editor/data/delta';
-import { VText } from '@/delta-based-editor/view/vtext';
-import { VInline } from '@/delta-based-editor/view/vinline';
+import { VText } from '@/delta-based-editor/view/vnodes/vtext';
+import { VInline } from '@/delta-based-editor/view/vnodes/vinline';
+
+// 填充字符：零宽不换行空格（Zero Width No-Break Space）
+export const ZERO_WIDTH_NO_BREAK_SPACE = '\ufeff';
 
 export const NEW_LINE_CHAR_LENGTH = 1;
 export const NEW_LINE_CHAR = '\n';

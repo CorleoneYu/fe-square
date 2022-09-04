@@ -1,4 +1,4 @@
-import { VLeaf } from '@/delta-based-editor/view/abstract/vleaf';
+import { VLeaf } from '@/delta-based-editor/view/vnodes/abstract/vleaf';
 
 export class VText extends VLeaf {
   public static tagName = 'text';

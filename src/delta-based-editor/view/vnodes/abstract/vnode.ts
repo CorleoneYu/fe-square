@@ -1,6 +1,6 @@
 import { LinkedList, LinkedNode } from '@/delta-based-editor/utils/linked-list';
 import { VNODE_KEY } from '@/delta-based-editor/utils/view';
-import { VRoot } from '@/delta-based-editor/view/vroot';
+import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 
 export default abstract class VNode extends LinkedNode<VNode> {
   public children: LinkedList<VNode> = new LinkedList<VNode>();
@@ -13,6 +13,10 @@ export default abstract class VNode extends LinkedNode<VNode> {
     super();
     this.domNode = domNode;
     domNode[VNODE_KEY] = this;
+  }
+
+  public getStyler() {
+    return this.root.styler;
   }
 
   /**

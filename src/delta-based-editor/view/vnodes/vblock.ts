@@ -1,6 +1,6 @@
 import { NEW_LINE_CHAR_LENGTH } from '@/delta-based-editor/utils/view';
-import { VContainer } from '@/delta-based-editor/view/abstract/vcontainer';
-import { VBreak } from '@/delta-based-editor/view/vbreak';
+import { VContainer } from '@/delta-based-editor/view/vnodes/abstract/vcontainer';
+import { VBreak } from '@/delta-based-editor/view/vnodes/vbreak';
 
 export class VBlock extends VContainer {
   public static tagName = 'P';

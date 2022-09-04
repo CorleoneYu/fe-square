@@ -1,4 +1,4 @@
-import { VLeaf } from '@/delta-based-editor/view/abstract/vleaf';
+import { VLeaf } from '@/delta-based-editor/view/vnodes/abstract/vleaf';
 
 export abstract class VEmbed extends VLeaf {
   public static tagName = 'SPAN';
@@ -21,5 +21,9 @@ export abstract class VEmbed extends VLeaf {
 
   public update(): void {
     // empty
+  }
+
+  public getOffsetFromNativeRangePos(node: Node, offset: number): number {
+    return -1;
   }
 }

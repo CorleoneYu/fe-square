@@ -1,6 +1,6 @@
 import Delta from '@/delta-based-editor/data/delta';
 import { NEW_LINE_CHAR, NEW_LINE_CHAR_LENGTH, vBlockToDelta, vRootToLines } from '@/delta-based-editor/utils/view';
-import { VRoot } from '@/delta-based-editor/view/vroot';
+import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 import isEqual from 'lodash/isEqual';
 
 interface IDeltaManager {
@@ -56,7 +56,7 @@ export class DeltaManager implements IDeltaManager {
     }
 
     const delta = updateDelta ?? new Delta();
-    console.log('delta: ', delta);
+    console.log('delta: ', delta, this.delta);
     return delta;
   }
 }

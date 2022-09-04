@@ -1,6 +1,6 @@
 import { createVNodeFromDomNode, getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
-import { VLeaf } from '@/delta-based-editor/view/abstract/vleaf';
-import VNode from '@/delta-based-editor/view/abstract/vnode';
+import { VLeaf } from '@/delta-based-editor/view/vnodes/abstract/vleaf';
+import VNode from '@/delta-based-editor/view/vnodes/abstract/vnode';
 
 const PROCESSING_ADDED_NODES_ERROR = 'Error processing addedNodes';
 
@@ -32,7 +32,6 @@ export class VContainer extends VNode {
   public length() {
     return this.children.reduce((total, child) => total + child.length(), 0);
   }
-
 
   /**
    * 递归获取全部叶子节点

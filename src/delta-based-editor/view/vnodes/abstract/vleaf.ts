@@ -1,4 +1,4 @@
-import VNode from '@/delta-based-editor/view/abstract/vnode';
+import VNode from '@/delta-based-editor/view/vnodes/abstract/vnode';
 
 /**
  * 叶子节点。

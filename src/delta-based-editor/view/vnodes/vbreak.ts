@@ -1,4 +1,4 @@
-import { VEmbed } from '@/delta-based-editor/view/abstract/vembed';
+import { VEmbed } from '@/delta-based-editor/view/vnodes/abstract/vembed';
 
 export class VBreak extends VEmbed {
   public static tagName = 'BR';

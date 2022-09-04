@@ -1,15 +1,21 @@
 import { DeltaManager } from '@/delta-based-editor/core/delta-manager';
+import { ISelection } from '@/delta-based-editor/core/selection/interface';
+import { Selection } from '@/delta-based-editor/core/selection/selection';
 import Delta from '@/delta-based-editor/data/delta';
 import { IDeltaBasedEditor, IDeltaBasedEditorProps } from '@/delta-based-editor/interface';
 import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-emitter';
-import { VRoot } from '@/delta-based-editor/view/vroot';
+import { Bold } from '@/delta-based-editor/modules/formats/bold';
+import { Styler } from '@/delta-based-editor/view/styler';
+import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 
 export class DeltaBasedEditor implements IDeltaBasedEditor {
   public innerEmitter = new EditorInnerEmitter();
 
   private input: HTMLDivElement = document.createElement('div');
   private vRoot!: VRoot;
+  private styler!: Styler;
   private deltaManager!: DeltaManager;
+  private selection!: ISelection;
 
   public constructor(props: IDeltaBasedEditorProps) {
     this.initInputDom(props.inputContainer, props.id);
@@ -21,7 +27,10 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
     return this.deltaManager.getDelta();
   }
 
-  // contenteditable
+  public hasFocus() {
+    return this.selection.hasFocus();
+  }
+
   private initInputDom(parent: HTMLDivElement, id: string) {
     this.input.setAttribute('id', id);
     this.input.setAttribute('contenteditable', 'true');
@@ -48,14 +57,37 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
   }
 
   private initModules() {
-    this.vRoot = new VRoot(this.input, this.innerEmitter);
+    this.styler = this.initStyler();
+    this.vRoot = new VRoot({
+      domNode: this.input,
+      innerEmitter: this.innerEmitter,
+      styler: this.styler,
+    });
     this.deltaManager = new DeltaManager(this.vRoot);
+    this.selection = new Selection({
+      vRoot: this.vRoot,
+      input: this.input,
+    });
   }
 
   private initEvents() {
     this.innerEmitter.onViewChange(() => {
       this.modify(() => this.deltaManager.update());
+    });
+
+    document.addEventListener('selectionchange', () => {
+      if (!this.hasFocus()) {
+        return;
+      }
+
+      // TODO 发送事件
     })
+  }
+
+  private initStyler() {
+    const styler = new Styler();
+    styler.addFormat(Bold.key, new Bold());
+    return styler;
   }
 
   // 处理 Delta 改变的 API

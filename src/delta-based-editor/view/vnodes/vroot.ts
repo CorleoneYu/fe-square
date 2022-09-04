@@ -1,8 +1,9 @@
 import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-emitter';
 import { getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
-import { VBlock } from '@/delta-based-editor/view/vblock';
-import { VContainer } from '@/delta-based-editor/view/abstract/vcontainer';
-import VNode from '@/delta-based-editor/view/abstract/vnode';
+import { VBlock } from '@/delta-based-editor/view/vnodes/vblock';
+import { VContainer } from '@/delta-based-editor/view/vnodes/abstract/vcontainer';
+import VNode from '@/delta-based-editor/view/vnodes/abstract/vnode';
+import { Styler } from '@/delta-based-editor/view/styler';
 
 /**
  * view 层的根节点
@@ -11,6 +12,7 @@ import VNode from '@/delta-based-editor/view/abstract/vnode';
  */
 export class VRoot extends VContainer {
   public static tagName = 'DIV';
+  public styler: Styler;
 
   private mutationObserver!: MutationObserver;
   private innerEmitter: EditorInnerEmitter;
@@ -19,10 +21,15 @@ export class VRoot extends VContainer {
     return document.createElement(VRoot.tagName);
   }
 
-  public constructor(domNode: Node, innerEmitter: EditorInnerEmitter) {
+  public constructor({ domNode, innerEmitter, styler }: {
+    domNode: Node;
+    innerEmitter: EditorInnerEmitter;
+    styler: Styler;
+  }) {
     super(domNode);
     this.root = this;
     this.innerEmitter = innerEmitter;
+    this.styler = styler;
 
     this.startMutationObserver();
 
