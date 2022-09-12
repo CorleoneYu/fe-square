@@ -9,6 +9,7 @@ main();
 /**
  * 快排
  * 时间复杂度：N * logN
+ * 空间复杂度 logN 最差 N
  * link p4 https://www.bilibili.com/video/BV13g41157hK?p=4&vd_source=7e817e5170ca4a2b16683f214bdf65c5
  */
 export function quickSort(arr: number[]) {
