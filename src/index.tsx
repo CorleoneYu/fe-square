@@ -2,7 +2,7 @@ import React from 'react';
 // import '@/mini-react/eight';
 import ReactDOM from 'react-dom';
 import App from './App';
-// import '@/algorithm/sorts/quick-sort';
+// import '@/algorithm/sorts/heap';
 
 const root = document.getElementById('root');
 

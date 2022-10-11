@@ -33,6 +33,51 @@ export class VContainer extends VNode {
     return this.children.reduce((total, child) => total + child.length(), 0);
   }
 
+  public split(index: number, force: boolean): VNode | null {
+    if (!force) {
+      if (index === 0) {
+        return this;
+      }
+
+      if (index === this.length()) {
+        return this.next;
+      }
+    }
+
+    // TODO code
+    // const clone = this.clone();
+    // this.parent.insertBefore(clone, this.next);
+    return null;
+  }
+
+  public format(name: string, value: any): void {
+    // TODO code 校验
+
+    this.getStyler().setStyle(this.domNode as HTMLElement, name, value);
+  }
+
+  public formatAt(index: number, length: number, name: string, value: any): void {
+    const styleValue = this.getStyler().getStyle(this.domNode as HTMLElement, name);
+    if (styleValue) {
+      if (styleValue === value) {
+        return;
+      }
+
+      const vNode = this.isolate(index, length) as VContainer;
+      vNode.format(name, value);
+      return;
+    }
+
+    this.children.forEachAt(index, length, (child, offset, length) => {
+      child.formatAt(offset, length, name, value);
+    });
+  }
+
+  public getFormats(): Object {
+    return this.getStyler().getStyles(this.domNode as HTMLElement);
+  }
+
+
   /**
    * 递归获取全部叶子节点
    * @param index 

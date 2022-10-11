@@ -1,6 +1,8 @@
-import { ISelection } from '@/delta-based-editor/core/selection/interface';
-import { Range } from '@/delta-based-editor/core/selection/range';
-import { isDescendant } from '@/delta-based-editor/utils/selection';
+import { IEditorRange, INormalizedNativeRange, ISelection } from '@/delta-based-editor/core/selection/interface';
+import { EditorRange } from '@/delta-based-editor/core/selection/range';
+import { isDescendant, normalizedNativeRange } from '@/delta-based-editor/utils/selection';
+import { getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
+import { VLeaf } from '@/delta-based-editor/view/vnodes/abstract/vleaf';
 import { VCursor } from '@/delta-based-editor/view/vnodes/vcursor';
 import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 
@@ -14,19 +16,19 @@ export class Selection implements ISelection {
   private input: HTMLDivElement;
   private vRoot: VRoot;
   private cursor: VCursor;
-  private lastRange: Range | null = null;
+  private lastRange: IEditorRange | null = null;
 
   public constructor(props: ISelectionProps) {
     this.vRoot = props.vRoot;
     this.input = props.input;
 
     this.cursor = new VCursor(VCursor.createDomNode());
-    this.lastRange = new Range(0, 0);
+    this.lastRange = new EditorRange(0, 0);
   }
 
   public clear() {
     this.cursor.restore();
-    this.lastRange = new Range(0, 0);
+    this.lastRange = new EditorRange(0, 0);
   }
 
   /**
@@ -52,7 +54,7 @@ export class Selection implements ISelection {
     // 如果选区为空（异常情况），需要手动设置一下
     const sel = document.getSelection();
     if (sel && !sel.rangeCount) {
-      this.setRange(new Range(0, 0));
+      this.setRange(new EditorRange(0, 0));
     }
   }
 
@@ -60,11 +62,86 @@ export class Selection implements ISelection {
     this.input.blur();
   }
 
-  public setRange(range: Range) {
+  /**
+   * 光标状态下，进行格式设置
+   */
+  public format(formatKey: string, value: string | number | boolean): void {
+    const nativeRange = this.getNativeRange();
+    if (!nativeRange?.native.collapsed) {
+      return
+    }
+
+    if (nativeRange.start.node !== this.cursor.textNode) {
+      const vNode = getVNodeFromDomNode(nativeRange.start.node, true);
+      if (!vNode) {
+        return;
+      }
+
+      const after = vNode.split(nativeRange.start.offset, false);
+      vNode.parent.insertBefore(this.cursor, after);
+    }
+
+    this.cursor.formatCursor(formatKey, value);
+
 
   }
 
-  public getRange() {
+  public setRange(range: EditorRange) {
 
+  }
+
+  public getRange(): [IEditorRange, INormalizedNativeRange] | [null, null] {
+    const nativeRange = this.getNativeRange();
+    if (!nativeRange) {
+      return [null, null];
+    }
+
+    return [this.nativeRangeToEditorRange(nativeRange), nativeRange];
+  }
+
+  private getNativeRange(): INormalizedNativeRange | null {
+    const selection = document.getSelection();
+    if (!selection || selection.rangeCount <= 0) {
+      return null;
+    }
+
+    const nativeRange = selection.getRangeAt(0);
+
+    if (!isDescendant(this.input, nativeRange.startContainer)) {
+      // 如果选区开始区域不在 editor 中，返回空
+      return null;
+    }
+
+    if (!nativeRange.collapsed && isDescendant(this.input, nativeRange.endContainer)) {
+      // 如果选区结束区域不在 editor 中，返回空
+      return null;
+    }
+
+    return normalizedNativeRange(nativeRange);
+  }
+
+  private nativeRangeToEditorRange(normalizedNativeRange: INormalizedNativeRange): EditorRange {
+    const positions: [Node, number][] = [[normalizedNativeRange.start.node, normalizedNativeRange.start.offset]];
+    if (!normalizedNativeRange.native.collapsed) {
+      positions.push([normalizedNativeRange.end.node, normalizedNativeRange.end.offset]);
+    }
+
+    const indexes = positions.map((position) => {
+      const [node, offset] = position;
+      const vNode = getVNodeFromDomNode(node, true)!;
+
+      // 叶子节点内部的 offset
+      let leafOffset = offset;
+      if (vNode instanceof VLeaf) {
+        leafOffset = vNode.getOffsetFromNativeRangePosition(node, offset);
+      }
+      // 叶子节点外部的 offset
+      const index = vNode.offset(this.vRoot);
+      return index + leafOffset;
+    });
+
+    const end = Math.min(Math.max(...indexes), this.vRoot.length() - 1);
+    const start = Math.min(end, ...indexes);
+    return new EditorRange(start, end);
   }
 }

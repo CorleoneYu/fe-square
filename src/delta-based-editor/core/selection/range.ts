@@ -1,4 +1,6 @@
-export class Range {
+import { IEditorRange } from '@/delta-based-editor/core/selection/interface';
+
+export class EditorRange implements IEditorRange {
   private start: number;
   private end: number;
 
@@ -19,7 +21,7 @@ export class Range {
     return this.end - this.start;
   }
 
-  public equals(range: Range): boolean {
+  public equals(range: EditorRange): boolean {
     return range.start === this.start && range.end === this.end;
   }
 

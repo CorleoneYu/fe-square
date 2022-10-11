@@ -1,5 +1,7 @@
 import { ZERO_WIDTH_NO_BREAK_SPACE } from '@/delta-based-editor/utils/view';
 import { VEmbed } from '@/delta-based-editor/view/vnodes/abstract/vembed';
+import VNode from '@/delta-based-editor/view/vnodes/abstract/vnode';
+import { VBlock } from '@/delta-based-editor/view/vnodes/vblock';
 
 export class VCursor extends VEmbed {
   public static tagName = 'SPAN';
@@ -44,7 +46,20 @@ export class VCursor extends VEmbed {
   }
 
   public formatCursor(name: string, value: any): void {
+    let index = 0;
+    let target: VNode = this;
 
+    // 计算出光标在 p 节点中的 offset，且找到 p 节点
+    while (target && !(target instanceof VBlock)) {
+      index += target.offset(target.parent);
+      target = target.parent;
+    }
+
+    if (target) {
+      this.savedLength = 1;
+      target.formatAt(index, this.length(), name, value);
+      this.savedLength = 0;
+    }
   }
 
   /**
@@ -55,7 +70,5 @@ export class VCursor extends VEmbed {
     if (!this.parent) {
       return;
     }
-
-
   }
 }

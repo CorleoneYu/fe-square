@@ -1,5 +1,5 @@
 import { DeltaBasedEditor } from '@/delta-based-editor';
-import { EditorInnerEmitter, EditorInnerEvent, ITextChangeEventProps } from '@/delta-based-editor/modules/emitter/editor-emitter';
+import { EditorInnerEvent, ITextChangeEventProps } from '@/delta-based-editor/modules/emitter/editor-emitter';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -14,6 +14,7 @@ const StyledEditorDemo = styled.div`
     font-size: 12px;
 
     .button {
+      border: none;
       cursor: pointer;
       margin-right: 8px;
       line-height: 28px;
@@ -35,14 +36,17 @@ const StyledEditorDemo = styled.div`
 `;
 
 const buttons = [
-  {
-    id: 'undo',
-  },
-  {
-    id: 'redo'
-  },
+  // {
+  //   id: 'undo',
+  // },
+  // {
+  //   id: 'redo'
+  // },
   {
     id: 'bold',
+    onClick: (editor: DeltaBasedEditor) => {
+      editor.setFormat('bold', 'true');
+    }
   },
 ]
 export const RichTextEditor: React.FC = () => {
@@ -79,7 +83,7 @@ export const RichTextEditor: React.FC = () => {
   }, [handleTextChange]);
 
   const renderButtons = useMemo(() => <div className='button-group'>
-    {buttons.map(button => <div key={button.id} className='button' id={button.id}>{button.id}</div>)}
+    {buttons.map(button => <button key={button.id} className='button' onClick={() => button.onClick(editorRef.current!)} id={button.id}>{button.id}</button>)}
   </div>, []);
 
   const renderEditor = useMemo(() => <div>

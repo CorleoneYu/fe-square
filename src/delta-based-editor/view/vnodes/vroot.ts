@@ -55,10 +55,17 @@ export class VRoot extends VContainer {
     super.insertBefore(childVNode, refChild);
   }
 
+  public override formatAt(index: number, length: number, name: string, value: any): void {
+    this.children.forEachAt(index, length, (child, offset, length) => {
+      child.formatAt(offset, length, name, value);
+    });
+    this.optimize();
+  }
+
   /**
    * 把整个 Dom 的内容同步到 vTree，并且进行整理。
    */
-  public sync(mutations?: MutationRecord[], shouldIgnoreComposing?: boolean) {
+  public sync(mutations?: MutationRecord[]) {
     const context = {};
     mutations = mutations || this.mutationObserver.takeRecords();
 
@@ -66,6 +73,7 @@ export class VRoot extends VContainer {
       return;
     }
 
+    // 收集此次变更对应的 vNode
     mutations.map((mutation: MutationRecord) => {
       const vNode = getVNodeFromDomNode(mutation.target, true);
       if (!vNode) {
@@ -80,7 +88,8 @@ export class VRoot extends VContainer {
 
       // 第二次遇到这个 vNode
       vNode.mutations.push(mutation);
-      // 返回 null，因为之前已经遇到过来
+
+      // 返回 null，因为之前已经遇到过了
       return null;
     }).forEach((vNode: VNode | null) => {
       if (!vNode || vNode === this) {
@@ -114,7 +123,6 @@ export class VRoot extends VContainer {
 
   private startMutationObserver() {
     this.mutationObserver = new MutationObserver((mutationList) => {
-      console.log('mutation', mutationList);
       this.sync(mutationList);
     });
 

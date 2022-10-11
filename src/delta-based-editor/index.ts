@@ -1,10 +1,13 @@
 import { DeltaManager } from '@/delta-based-editor/core/delta-manager';
-import { ISelection } from '@/delta-based-editor/core/selection/interface';
+import { IEditorRange, ISelection } from '@/delta-based-editor/core/selection/interface';
 import { Selection } from '@/delta-based-editor/core/selection/selection';
 import Delta from '@/delta-based-editor/data/delta';
 import { IDeltaBasedEditor, IDeltaBasedEditorProps } from '@/delta-based-editor/interface';
 import { EditorInnerEmitter } from '@/delta-based-editor/modules/emitter/editor-emitter';
+import { BASE_STYLE } from '@/delta-based-editor/modules/formats/base-style';
 import { Bold } from '@/delta-based-editor/modules/formats/bold';
+import { IDeltaStyle, IFormatProps } from '@/delta-based-editor/modules/formats/interface';
+import { bubbleFormats, getVNodeFromDomNode } from '@/delta-based-editor/utils/view';
 import { Styler } from '@/delta-based-editor/view/styler';
 import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 
@@ -29,6 +32,66 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
 
   public hasFocus() {
     return this.selection.hasFocus();
+  }
+
+  public getFormat(): IFormatProps {
+    const [, nativeRange] = this.selection.getRange();
+    if (!nativeRange) {
+      return {};
+    }
+    const vNode = getVNodeFromDomNode(nativeRange.start.node, true);
+    if (!vNode) {
+      return {};
+    }
+
+    return bubbleFormats(vNode);
+  }
+
+  /**
+   * 获取当前光标的样式（包括 editor 的 base 样式）
+   */
+  public getFormatWithBaseStyle(): IDeltaStyle {
+    const formatProps = this.getFormat();
+    const selectionFormats = {
+      ...formatProps,
+      bold: formatProps.bold || false,
+      italic: formatProps.italic || false,
+      strikethrough: formatProps.strikethrough || false,
+      underline: formatProps.underline || false,
+    };
+    return {
+      ...BASE_STYLE,
+      ...selectionFormats,
+    }
+  }
+
+  /**
+   * 对富文本选区内容进行样式设置
+   * 会对 delta 层 和 view 层进行样式信息的更新
+   */
+  public setFormat(key: string, value: string | number) {
+    this.sync();
+
+    return this.modify(() => {
+      const range = this.getSelection();
+      if (!range) {
+        return new Delta();
+      }
+
+      // 对光标聚焦情况进行 format 操作
+      if (range.getStart() === range.getEnd()) {
+        this.selection.format(key, value);
+        return new Delta();
+      }
+
+      // 对 delta-manager 进行改动
+      // 同时会修改到 view 层
+      return new Delta();
+    })
+  }
+
+  public getSelection(): IEditorRange | null {
+    return this.selection.getRange()?.[0] ?? null
   }
 
   private initInputDom(parent: HTMLDivElement, id: string) {
@@ -88,6 +151,10 @@ export class DeltaBasedEditor implements IDeltaBasedEditor {
     const styler = new Styler();
     styler.addFormat(Bold.key, new Bold());
     return styler;
+  }
+
+  private sync() {
+    this.vRoot.sync(undefined);
   }
 
   // 处理 Delta 改变的 API

@@ -4,6 +4,7 @@ import { VRoot } from '@/delta-based-editor/view/vnodes/vroot';
 import Delta from '@/delta-based-editor/data/delta';
 import { VText } from '@/delta-based-editor/view/vnodes/vtext';
 import { VInline } from '@/delta-based-editor/view/vnodes/vinline';
+import { VContainer } from '@/delta-based-editor/view/vnodes/abstract/vcontainer';
 
 // 填充字符：零宽不换行空格（Zero Width No-Break Space）
 export const ZERO_WIDTH_NO_BREAK_SPACE = '\ufeff';
@@ -19,6 +20,10 @@ declare global {
   }
 }
 
+/**
+ * 通过 dom 找到 vNode
+ * @param bubble 是否冒泡向上查询
+ */
 export function getVNodeFromDomNode(domNode: Node | null, bubble: boolean = false): VNode | null {
   if (!domNode) {
     return null;
@@ -73,12 +78,23 @@ export function vBlockToDelta(vBlock: VBlock) {
  * @param formats 
  * @returns 
  */
-export function bubbleFormats(vNode: VNode, formats = {}) {
+export function bubbleFormats(vNode: VNode, formats = {}): any {
   if (!vNode) {
     return formats;
   }
 
-  // TODO: 补齐
+  if (vNode instanceof VContainer) {
+    formats = {
+      ...vNode.getFormats(),
+      ...formats,
+    }
+  }
+
+  if (!vNode.parent || vNode.parent instanceof VRoot) {
+    return formats;
+  }
+
+  return bubbleFormats(vNode.parent, formats);
 }
 
 /**

@@ -56,7 +56,6 @@ export class DeltaManager implements IDeltaManager {
     }
 
     const delta = updateDelta ?? new Delta();
-    console.log('delta: ', delta, this.delta);
     return delta;
   }
 }

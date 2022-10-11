@@ -134,9 +134,9 @@ export class LinkedList<T extends LinkedNode<T>> implements Iterable<T> {
   }
 
   /**
-   * 遍历？
-   * @param index 
-   * @param length 
+   * 遍历，在给定的范围内执行回调
+   * @param index 开始位置
+   * @param length 长度
    * @param callback 
    * @returns 
    */
