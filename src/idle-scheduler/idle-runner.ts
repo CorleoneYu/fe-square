@@ -43,10 +43,12 @@ export class IdleRunner implements IIdleRunner {
     if (this.idleStartTime === 0) {
       // 初始化
       this.idleStartTime = currentTime;
+      return true;
     }
 
     // 判断当前时间是否达到阈值，即是否可以继续执行
-    const isIdle = !(currentTime - this.idleStartTime < this.threshold);
+    const isIdle = currentTime - this.idleStartTime < this.threshold;
+    this.idleStartTime = currentTime;
     return isIdle;
   }
 

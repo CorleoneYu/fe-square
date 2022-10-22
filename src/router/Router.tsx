@@ -19,7 +19,7 @@ const Router = () => {
         <Route path="/editor" component={Editor} />
         <Route path="/di" component={Di} />
         <Route path="/use-interval-demo" component={Counter} />
-        <Route path="/idle-sheduler" component={IdleSchedulerDemo} />
+        <Route path="/idle-scheduler" component={IdleSchedulerDemo} />
         <Route path="/rich-text-editor" component={RichTextEditor} />
       </Switch>
     </BrowserRouter>

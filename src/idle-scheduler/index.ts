@@ -15,7 +15,7 @@ function calculateUnit(val: number, max: number) {
   return Math.max(val, max);
 }
 
-const count = 100000000;
+const count = Math.pow(10, 8);
 const nums = createNums(count);
 
 export function syncExecute() {
