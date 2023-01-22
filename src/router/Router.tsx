@@ -8,6 +8,7 @@ import Di from '@/di';
 import { Counter } from '@/use-interval-demo';
 import { IdleSchedulerDemo } from '@/idle-scheduler/demo';
 import { RichTextEditor } from '@/delta-based-editor/demo';
+import { ForSale } from '@/for-sale/client/components';
 
 const Router = () => {
   return (
@@ -21,6 +22,7 @@ const Router = () => {
         <Route path="/use-interval-demo" component={Counter} />
         <Route path="/idle-scheduler" component={IdleSchedulerDemo} />
         <Route path="/rich-text-editor" component={RichTextEditor} />
+        <Route path="/for-sale" component={ForSale} />
       </Switch>
     </BrowserRouter>
   );
