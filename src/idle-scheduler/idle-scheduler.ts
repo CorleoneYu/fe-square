@@ -22,6 +22,8 @@ export interface IIdleScheduler {
   removeAll(): void;
 }
 
+const step = 1000;
+
 export class IdleScheduler implements IIdleScheduler {
   private tasks: ITask[] = [];
   private isRunning = false;
@@ -64,17 +66,19 @@ export class IdleScheduler implements IIdleScheduler {
     const currentTime = this.idleRunner.getCurrentTime();
 
     do {
-      const task = this.tasks.shift();
-      if (!task) {
-        break;
-      }
+      for (let i = 0; i < step; i++) {
+        const task = this.tasks.shift();
+        if (!task) {
+          break;
+        }
 
-      // 执行
-      const taskResult = task.run.call(task.context);
+        // 执行
+        const taskResult = task.run.call(task.context);
 
-      // 如果没执行完，则继续回到任务队列
-      if (taskResult !== TaskState.FINISHED) {
-        this.tasks.push(task);
+        // 如果没执行完，则继续回到任务队列
+        if (taskResult !== TaskState.FINISHED) {
+          this.tasks.push(task);
+        }
       }
     } while (this.idleRunner.getCurrentTime() - currentTime < this.runtime);
 
