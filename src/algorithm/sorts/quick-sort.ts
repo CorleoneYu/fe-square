@@ -1,11 +1,3 @@
-function main() {
-  const arr = [3, 5, 6, 3, 4, 5, 2, 6, 9, 0];
-  quickSort(arr);
-  console.log('sorted', arr);
-}
-
-main();
-
 /**
  * 快排
  * 时间复杂度：N * logN
@@ -43,9 +35,9 @@ function swap(arr: number[], p1: number, p2: number) {
  * 处理 arr[left, ..., right] 范围
  * 取 arr[right] 为 p, 将数组做划分 <p、==p、>p 三个部分
  * 返回等与区域的左右边界
- * @param arr 
- * @param left 
- * @param right 
+ * @param arr
+ * @param left
+ * @param right
  */
 function partition(arr: number[], left: number, right: number) {
   // 划分值
@@ -80,5 +72,5 @@ function partition(arr: number[], left: number, right: number) {
   return {
     left: less + 1,
     right: more,
-  }
+  };
 }

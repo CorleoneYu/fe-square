@@ -19,6 +19,7 @@ export class HeapArray implements IHeap {
 
   private numbers: number[] = [];
 
+  // 在最后添加，然后往上冒泡
   public insert(value: number): void {
     let index = this.size;
     this.numbers[index] = value;
@@ -29,6 +30,7 @@ export class HeapArray implements IHeap {
     this.size++;
   }
 
+  // 取出最上的节点，然后从最后的节点替换最上的，最后进行整理
   public pop(): number | undefined {
     if (this.size === 0) {
       return undefined;
@@ -67,6 +69,7 @@ export class HeapArray implements IHeap {
     return result;
   }
 
+  // 整理 index 节点，比较两个子元素，如果父节点小于子元素，则交换
   private heapify(index: number) {
     let leftIndex = index * 2 + 1;
 

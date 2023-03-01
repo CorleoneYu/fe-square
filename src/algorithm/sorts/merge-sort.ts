@@ -3,9 +3,13 @@
  * 时间复杂度：N * logN
  * 空间复杂度：N
  * link p4 https://www.bilibili.com/video/BV13g41157hK?p=4&vd_source=7e817e5170ca4a2b16683f214bdf65c5
+ * 思路：
+ * 1. 找到中点
+ * 2. 递归左边，右边
+ * 3. 合并两个有序数组
  * @param arr 待排序数组，原地排
- * @param left 
- * @param right 
+ * @param left
+ * @param right
  */
 export function mergeSort(arr: number[], left: number, right: number) {
   if (left === right) {
@@ -46,11 +50,3 @@ function merge(arr: number[], left: number, middle: number, right: number) {
     arr[i + left] = helper[i];
   }
 }
-
-function main() {
-  const values = [3, 5, 1, 4, 2, 6, 9, 10, 7, 1];
-  mergeSort(values, 0, values.length - 1);
-  console.log('values', values);
-}
-
-main();
