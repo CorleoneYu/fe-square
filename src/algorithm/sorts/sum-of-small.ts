@@ -1,8 +1,9 @@
 /**
  * 归并排序思路
- * 求小和问题
+ * 题目：求小和问题
+ * 变题：逆序对问题
  * 在一个数组中，每个数左边比当前数小的数累加起来，叫做这个数组的小和。
- * 例子：[1, 3, 4, 2, 5] 
+ * 例子：[1, 3, 4, 2, 5]
  * 1. 左边比 1 小的数，没有
  * 3. 左边比 3 小的数：1
  * 4. 左边比 4 小的数：1, 3 = 4
@@ -19,6 +20,10 @@ export function sumOfSmall(arr: number[]): number {
   return process(arr, 0, arr.length - 1);
 }
 
+/**
+ * 思路：归并排序
+ * 遍历，求右边有多少个(count)数比当前的大，当前这个数贡献 current * count，最后加起来
+ */
 function process(arr: number[], left: number, right: number): number {
   if (left === right) {
     return 0;
@@ -35,7 +40,7 @@ function merge(arr: number[], left: number, middle: number, right: number): numb
   let p2 = middle + 1;
 
   while (p1 <= middle && p2 <= right) {
-    if (arr[p1] <= arr[p2]) {
+    if (arr[p1] < arr[p2]) {
       helper.push(arr[p1]);
       // 右边有多少个数大于 arr[p1]
       const rightBigCount = right - p2 + 1;
@@ -62,7 +67,6 @@ function merge(arr: number[], left: number, middle: number, right: number): numb
   }
 
   return sum;
-
 }
 
 function main() {

@@ -6,6 +6,7 @@ function main() {
 
 /**
  * link https://leetcode.com/problems/two-sum/
+ * 思路：map 记录，遍历，在 map 找 target = sum - current
  */
 export function twoSum(nums: number[], sum: 9) {
   const map = new Map<number, number>();

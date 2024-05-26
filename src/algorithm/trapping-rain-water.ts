@@ -28,9 +28,9 @@ export function trap1(heights: number[]): number {
 
   /**
    * 时间复杂度 O(n)
-   * @param start 
-   * @param end 
-   * @param heights 
+   * @param start
+   * @param end
+   * @param heights
    */
   function getMax(start: number, end: number, heights: number[]): number {
     let max = heights[start];
@@ -39,7 +39,7 @@ export function trap1(heights: number[]): number {
     }
     return max ?? 0;
   }
-};
+}
 
 /**
  * 优化 getMax 从 O(n) -> O(1)
@@ -52,18 +52,17 @@ export function trap2(heights: number[]) {
   }
 
   const leftMaxHeights = [heights[0]];
-  // 只需要求 1 至 heights.length - 2，前后两列不可能有水
+  // 注意 i = 1 开始，只需要求 1 至 heights.length - 2，因为前后两列不可能有水
   for (let i = 1; i < heights.length - 1; i++) {
     leftMaxHeights[i] = Math.max(leftMaxHeights[i - 1], heights[i - 1]);
   }
-  console.log('leftMaxHeights', leftMaxHeights);
 
   const rightMaxHeights: number[] = [];
   rightMaxHeights[heights.length - 1] = heights[heights.length - 1];
+  // 注意从 i = heights.length - 2 到 1，因为前后两列不可能有水
   for (let i = heights.length - 2; i >= 1; i--) {
     rightMaxHeights[i] = Math.max(rightMaxHeights[i + 1], heights[i + 1]);
   }
-  console.log('rightMaxHeights', rightMaxHeights);
 
   let result = 0;
   for (let i = 1; i < heights.length - 1; i++) {
@@ -78,9 +77,41 @@ export function trap2(heights: number[]) {
 }
 
 /**
- * 单调栈
+ * 双指针 left, right 标记 Min(maxLeft, maxRight);
+ * 优化空间
  * 时间复杂度：O(n)
  * 空间复杂度：O(1)
+ */
+export function trap4(heights: number[]) {
+  if (heights.length <= 2) {
+    return 0;
+  }
+
+  let maxLeft = 0;
+  let maxRight = 0;
+
+  let left = 0;
+  let right = heights.length - 1;
+
+  let result = 0;
+  while (left < right) {
+    maxLeft = Math.max(maxLeft, heights[left]);
+    maxRight = Math.max(maxRight, heights[right]);
+    if (heights[left] < heights[right]) {
+      result += maxLeft - heights[left];
+      left++;
+    } else {
+      result += maxRight - heights[right];
+      right--;
+    }
+  }
+  return result;
+}
+
+/**
+ * 单调栈
+ * 时间复杂度：O(n)
+ * 空间复杂度：O(n) 栈的空间
  */
 export function trap3(heights: number[]) {
   if (heights.length <= 2) {

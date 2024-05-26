@@ -31,4 +31,4 @@ const MiniReact = {
 
 /** @jsx MiniReact.createElement */
 export const element = <div id="mini-react">123</div>;
-console.log('[build-my-reaact]step1: element: ', element);
+console.log('[build-my-react]step1: element: ', element);

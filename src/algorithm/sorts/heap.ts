@@ -1,3 +1,5 @@
+import { swap } from '@/algorithm/utils';
+
 interface IHeap {
   size: number;
   insert(value: number): void;
@@ -24,7 +26,7 @@ export class HeapArray implements IHeap {
     let index = this.size;
     this.numbers[index] = value;
     while (this.numbers[index] > this.numbers[this.getParentIndex(index)]) {
-      this.swap(index, this.getParentIndex(index));
+      swap(this.numbers, index, this.getParentIndex(index));
       index = this.getParentIndex(index);
     }
     this.size++;
@@ -87,7 +89,7 @@ export class HeapArray implements IHeap {
         break;
       }
 
-      this.swap(index, largestIndex);
+      swap(this.numbers, index, largestIndex);
       index = largestIndex;
       leftIndex = index * 2 + 1;
     }
@@ -95,11 +97,5 @@ export class HeapArray implements IHeap {
 
   private getParentIndex(index: number) {
     return Math.floor((index - 1) / 2);
-  }
-
-  private swap(index: number, targetIndex: number) {
-    let temp = this.numbers[index];
-    this.numbers[index] = this.numbers[targetIndex];
-    this.numbers[targetIndex] = temp;
   }
 }

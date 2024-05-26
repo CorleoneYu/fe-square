@@ -91,6 +91,7 @@ export function getIntersectionNode(headA: ListNode | null, headB: ListNode | nu
     p2 = p2?.next ?? null;
     count2++;
   }
+
   // 找出长度差
   // p1 指向长链表，p2 指向短链表
   let diff = 0;
@@ -174,4 +175,69 @@ export function isPalindrome(head: ListNode | null): boolean {
     reversed = reversed.next;
   }
   return true;
+}
+
+/**
+ * link https://leetcode.cn/problems/merge-k-sorted-lists/
+ * 合并 k 个升序链表
+ * @param lists
+ * @returns
+ */
+function mergeKLists(lists: ListNode[] | null): ListNode | null {
+  return null;
+}
+
+/**
+ * 合并升序链表
+ * @param list1
+ * @param list2
+ */
+export function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+  let p1 = list1;
+  let p2 = list2;
+  const head: ListNode = {
+    val: 0,
+    next: null,
+  };
+
+  let current: ListNode = head;
+  while (p1 && p2) {
+    if (p1.val > p2.val) {
+      current.next = p2;
+      p2 = p2.next;
+    } else {
+      current.next = p1;
+      p1 = p1.next;
+    }
+    current = current.next!;
+  }
+
+  // 如果还有没有合并完的，则接在后面
+  current.next = p1 === null ? p2 : p1;
+  return head.next;
+}
+
+/**
+ * 思路：分治合并
+ * 时间复杂度：O(Kn * logK)
+ * @param lists
+ */
+export function mergeKLists1(lists: ListNode[]): ListNode | null {
+  function merge(lists: ListNode[], left: number, right: number): ListNode | null {
+    if (left === right) {
+      return lists[left];
+    }
+
+    // 注意这里，要返回 null
+    if (left > right) {
+      return null;
+    }
+
+    const middle = left + Math.floor((right - left) / 2);
+    const leftList = merge(lists, left, middle);
+    const rightList = merge(lists, middle + 1, right);
+    return mergeTwoLists(leftList, rightList);
+  }
+
+  return merge(lists, 0, lists.length - 1);
 }

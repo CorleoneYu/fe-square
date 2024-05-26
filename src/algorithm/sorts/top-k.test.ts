@@ -8,6 +8,8 @@
  * @param k
  */
 
+import { swap } from '@/algorithm/utils';
+
 // 大根堆解法
 export function smallestK1(arr: number[], k: number): number[] {
   if (k === 0) {
@@ -19,10 +21,12 @@ export function smallestK1(arr: number[], k: number): number[] {
   }
 
   const heap = new Heap();
+  // 先插入 k 个元素
   for (let i = 0; i < k; i++) {
     heap.insert(arr[i]);
   }
 
+  // 有要求的插入
   for (let i = k; i < arr.length; i++) {
     const top = heap.getTop()!;
     if (top < arr[i]) {
@@ -32,6 +36,7 @@ export function smallestK1(arr: number[], k: number): number[] {
     heap.insert(arr[i]);
   }
 
+  // 从堆中获取 k 个数
   const result: number[] = [];
   for (let i = 0; i < k; i++) {
     result.push(heap.pop()!);
@@ -57,7 +62,7 @@ class Heap {
     this.numbers.push(value);
 
     while (this.numbers[parentIndex] < this.numbers[index]) {
-      this.swap(index, parentIndex);
+      swap(this.numbers, index, parentIndex);
       index = parentIndex;
     }
   }
@@ -104,16 +109,10 @@ class Heap {
         // 父元素较大
         break;
       }
-      this.swap(index, largestIndex);
+      swap(this.numbers, index, largestIndex);
       index = largestIndex;
       leftIndex = index * 2 + 1;
     }
-  }
-
-  private swap(index: number, targetIndex: number) {
-    let temp = this.numbers[index];
-    this.numbers[index] = this.numbers[targetIndex];
-    this.numbers[targetIndex] = temp;
   }
 
   private getParentIndex(index: number) {
@@ -127,3 +126,58 @@ describe('smallestK', () => {
     expect(result.sort()).toEqual([1, 2, 3, 4]);
   });
 });
+
+export function smallestK(arr: number[], k: number) {
+  if (k === 0) {
+    return [];
+  }
+
+  if (k >= arr.length) {
+    return arr;
+  }
+
+  solution(arr, k, 0, arr.length - 1);
+  return arr.slice(0, k);
+}
+
+/**
+ * 将 arr 前 k 小的树放在左区间
+ */
+function solution(arr: number[], k: number, left: number, right: number) {
+  if (left >= right) {
+    return;
+  }
+
+  // 随机选 index
+  const randomIndex = Math.floor(Math.random() * (right - left)) + left;
+  swap(arr, right, randomIndex);
+  const partitionIndex = partition(arr, left, right);
+
+  // 完全满足
+  if (partitionIndex - left + 1 === k) {
+    return;
+  }
+
+  // 左半部分满足，右半部分继续排
+  if (partitionIndex - left + 1 < k) {
+    solution(arr, k - (partitionIndex - left + 1), partitionIndex + 1, right);
+    return;
+  }
+
+  // 左半部分找 k 个元素
+  solution(arr, k, left, partitionIndex - 1);
+}
+
+function partition(arr: number[], left: number, right: number): number {
+  const key = arr[right];
+  let less = left - 1;
+  for (let j = left; j < right; j++) {
+    if (arr[j] <= key) {
+      swap(arr, j, less + 1);
+      less++;
+    }
+  }
+  // 最后把 right 交换到 less + 1
+  swap(arr, less + 1, right);
+  return less + 1;
+}
