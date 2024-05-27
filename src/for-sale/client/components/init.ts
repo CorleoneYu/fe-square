@@ -38,6 +38,7 @@ export function getHouseCards(_playerCount: number): ICardMap {
   // TODO: 根据玩家人数，随机去除
   return cardMap;
 }
+
 export function getBanknoteCards(_playerCount: number): ICardMap {
   const cardMap: ICardMap = {};
   const banknoteCount = 30;

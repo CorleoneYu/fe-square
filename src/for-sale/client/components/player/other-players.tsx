@@ -14,13 +14,13 @@ const StyledOtherPlayers = styled.div`
     }
   }
 
-  .left {
+  .left-players {
     position: absolute;
     left: 16px;
     top: 120px;
   }
 
-  .right {
+  .right-players {
     position: absolute;
     right: 16px;
     top: 120px;
@@ -37,14 +37,14 @@ export const OtherPlayers: React.FC<IOtherPlayersProps> = (props) => {
 
   return (
     <StyledOtherPlayers>
-      <div className="left">
+      <div className="left-players">
         {leftPlayers.map((player) => (
           <div className="player" key={player.uid}>
             <Player playerId={player.uid} />
           </div>
         ))}
       </div>
-      <div className="right">
+      <div className="right-players">
         {rightPlayers.map((player) => (
           <div className="player" key={player.uid}>
             <Player playerId={player.uid} />

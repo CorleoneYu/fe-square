@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@babel/preset-typescript": "^7.12.7",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.18",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.3.0",
@@ -18,8 +22,10 @@
     "fast-diff": "^1.2.0",
     "hox": "^1.1.2",
     "konva": "^7.2.5",
+    "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-draggable": "^4.4.6",
     "react-konva": "^17.0.2-0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
@@ -60,6 +66,7 @@
     "@babel/plugin-proposal-decorators": "^7.12.12",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@types/lodash": "^4.17.4",
     "@types/node": "^18.11.18",
     "@types/webpack-env": "^1.18.0",
     "babel-jest": "^26.6.0",
@@ -68,6 +75,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^4.3.7",
     "react-app-rewired": "^2.1.8",
+    "react-refresh": "^0.14.2",
     "ts-jest": "^26.5.6"
   },
   "config": {
